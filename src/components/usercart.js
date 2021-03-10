@@ -72,6 +72,7 @@ const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const [dataa, setDataa] = useState([]);
   let [total, setTotal] = useState(0);
+  const [statusdata, setstatusdata]=useState([]);
   
   let [totalPrice, setTotalPrice] = useState(0);
    const TotalCart = () => {
@@ -94,6 +95,14 @@ const [isLoading, setLoading] = useState(true);
  
   useEffect(() => {
     setIsLoading(true);
+           
+    AsyncStorage.getItem('puser')
+    .then(req => JSON.parse(req))
+    .then(json => setstatusdata(json))
+    .catch(error => console.log(error))
+    console.log("data.....",statusdata)
+   
+
     AsyncStorage.getItem('userData').then((result) => {
       console.log('userData id' + result);
       let Rnumber = JSON.parse(result);
@@ -155,6 +164,7 @@ const [isLoading, setLoading] = useState(true);
   //let catId = '0';
   //let [cartId, setCartId] = useState('');
   const [ifLoading, setIsLoading] = useState(false);
+ 
   
 
 
@@ -382,10 +392,32 @@ const [isLoading, setLoading] = useState(true);
                 width: '100%',
                 marginTop: 20,
               }}
-              onPress={() =>
+              onPress={() =>{
+                
+        
+              
+                if (statusdata === undefined || statusdata.length == 0)
+                {
+          //    alert(" null")
+          //  console.log("dat is null data",statusdata)
+
                 navigation.navigate('CheckOut', {
-                  totall: totalPrice,
-                })
+                    totall: totalPrice,
+                 })
+
+               }
+               else{
+                // alert(" not null")
+                // console.log("dat is null data",statusdata)
+                navigation.navigate('CheckOutStatus', {
+                        totall: totalPrice,
+                     })
+               }
+              
+            
+            }
+
+               
               }>
               <Text
                 style={{

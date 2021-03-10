@@ -13,6 +13,7 @@ import {
   StatusBar,
   Image,
   TouchableOpacity,
+  ActivityIndicator,
   Dimensions,
   FlatList,
   ImageBackground,
@@ -70,7 +71,7 @@ const RenderHeader = () => {
 };
 
 const CheckOut = ({route, navigation}) => {
-  const [isLoading, setLoading] = useState(true);
+  const [isLoading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [Fname, setFname] = useState('');
   const [Lname, setLname] = useState('');
@@ -83,9 +84,13 @@ const CheckOut = ({route, navigation}) => {
   const [Zip, setZip] = useState('');
   const [Phone, setPhone] = useState('');
   const [Email, setEmail] = useState('');
-  const [Payment, setPayment] = useState('cash');
+  const [Payment, setPayment] = useState('cash');  
+  const [IDcount, setIDcount] = useState(0); 
+
 
   const handleCheckOutTap = (e) => {
+    setLoading(true);
+    setIDcount(IDcount+1)
     AsyncStorage.getItem('userData').then((result) => {
       console.log('userData ID' + result);
       let user = JSON.parse(result);
@@ -166,91 +171,87 @@ const CheckOut = ({route, navigation}) => {
           setData(json);
           Alert.alert(data.result);
          // navigation.navigate('HomeScreen');
+         setFname('');
+       setLname('');
+         setCname('')
+      setCountry('')
+         setAddress('')
+         setStreet('')
+         setCity('')
+        setState('')
+  setZip('')
+setPhone('')
+ setEmail('')
+ setLoading(false);
+
+         const arrayData = [];
+     
+         var dta =[
+           {
+             id:IDcount,
+             Fname: Fname,
+             Lname: Lname,
+             Country: Country,
+             Address: Address,
+             Street: Street,
+             City: City,
+             State: State,
+             Zip:Zip,
+             Phone:Phone,
+             Email:Email
+           }
+         ]
+         
+          //setcheckData(dta)
+          AsyncStorage.getItem('puser').then(value => {
+            if (value !== null) {
+              const d = JSON.parse(value);
+              d.push(dta);
+              AsyncStorage.setItem('puser', JSON.stringify(d)).then(
+                () => {
+                  AsyncStorage.getItem('puser')
+                  .then(req => JSON.parse(req))
+                  
+                  .catch(error => console.log(error))
+                       
+                }
+              );
+            } else {
+              AsyncStorage.setItem('puser', JSON.stringify(arrayData)
+              ).then(
+                () => {
+                  AsyncStorage.getItem('puser')
+                  .then(req => JSON.parse(req))
+                  .then(json => console.log(json))
+                  .catch(error => console.log(error))
+                    
+              });
+            }
+          });
+          // console.log("new data**", checkdata)
+          // console.log("new data**", checkdata[0].Fname)
+          // AsyncStorage.setItem('abc', JSON.stringify(checkdata)).then(
+          //   () =>
+          //     AsyncStorage.getItem('abc').then((result) => {
+              
+          //        console.log(result[0]);
+          //       })
+              
+          // );
         })
         .catch((error) => console.error(error))
         .finally(() => setLoading(false));
     });
 
-    //console.log(uri);
-    // if (Fname == '') {
-    //   Alert.alert('Enter First Name');
-    //   return;
-    // }
-
-    // if (Lname == '') {
-    //   Alert.alert('Enter Last Name');
-    //   return;
-    // }
-    // if (Country == '') {
-    //   Alert.alert('Enter Country');
-    //   return;
-    // }
-    // if (Address == '') {
-    //   Alert.alert('Enter Address 1');
-    //   return;
-    // }
-
-    // if (Street == '') {
-    //   Alert.alert('Enter Address 2');
-    //   return;
-    // }
-    // if (City == '') {
-    //   Alert.alert('Enter City');
-    //   return;
-    // }
-    // if (Country == '') {
-    //   Alert.alert('Enter Country');
-    //   return;
-    // }
-
-    // if (Zip == '') {
-    //   Alert.alert('Enter Zip');
-    //   return;
-    // }
-    // if (Phone == '') {
-    //   Alert.alert('Enter Phone');
-    //   return;
-    // }
-    // if (Email == '') {
-    //   Alert.alert('Enter Email');
-    //   return;
-    // }
-
-    // const uri =
-    //   api.checkout +
-    //   'first_name=' +
-    //   Fname +
-    //   '&last_name=' +
-    //   Lname +
-    //   '&company_name=' +
-    //   Cname +
-    //   '&country=' +
-    //   Country +
-    //   '&address_one=' +
-    //   Address +
-    //   '&address_two' +
-    //   Street +
-    //   '&city=' +
-    //   City +
-    //   '&state=' +
-    //   State +
-    //   '&zip=' +
-    //   Zip +
-    //   '&phone=' +
-    //   Phone +
-    //   '&email=' +
-    //   Email +
-    //   '&payment=cash&user_id=25';
-    // console.log(uri);
-    // fetch(uri)
-    //   .then((response) => response.json())
-    //   .then((json) => {
-    //     setData(json);
-    //     Alert.alert(data.result);
-    //   })
-    //   .catch((error) => console.error(error))
-    //   .finally(() => setLoading(false));
+ 
   };
+  if (isLoading) {
+    return (
+      <View style={{flex: 1, justifyContent: 'center'}}>
+        <ActivityIndicator size="large" color="black" />
+      </View>
+    );
+  }
 
   const {totall} = route.params;
   return (
@@ -346,6 +347,7 @@ const CheckOut = ({route, navigation}) => {
               <TextInput
                 style={[styles.textb, {color: '#808080'}]}
                 placeholder={'Zip'}
+                keyboardType={'number-pad'}
                 placeholderTextColor={'#808080'}
                 autoCapitilize={false}
                 onChangeText={(text) => setZip(text)}
@@ -354,6 +356,7 @@ const CheckOut = ({route, navigation}) => {
               <TextInput
                 style={[styles.textb, {color: '#808080'}]}
                 placeholder={'#Phone'}
+                keyboardType={'phone-pad'}
                 placeholderTextColor={'#808080'}
                 autoCapitilize={false}
                 onChangeText={(text) => setPhone(text)}
@@ -362,6 +365,7 @@ const CheckOut = ({route, navigation}) => {
               <TextInput
                 style={[styles.textb, {color: '#808080'}]}
                 placeholder={'Email'}
+                keyboardType={'email-address'}
                 placeholderTextColor={'#808080'}
                 autoCapitilize={false}
                 onChangeText={(text) => setEmail(text)}

@@ -83,7 +83,7 @@ function login() {
 
               let user = JSON.parse(result);
 
-              // console.log(user.user_id);
+              // console.log("uesr id is equl"+user.user_id);
             }),
             
         );

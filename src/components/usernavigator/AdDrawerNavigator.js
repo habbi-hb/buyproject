@@ -18,6 +18,7 @@ import ChangePassword from '../ChangePassword';
 import Usersearchresult from '../Usersearchresult'
 import UsercategoriesList from '../UsercategoriesList'
 import UsercatagoriesProductList from '../UsercategoriesProductList'
+import CheckOutStatus from '../checkoutstatus'
 
 const Drawer = createDrawerNavigator();
 
@@ -41,7 +42,7 @@ export default function RouteNav1() {
       <Drawer.Screen name="CheckStatus"  component={CheckStatus} />
       <Drawer.Screen name="ChangePassword" component={ChangePassword} />
       <Drawer.Screen name="OrderDetails" component={OrderDetails} />
-      
+      <Drawer.Screen name="CheckOutStatus" component={CheckOutStatus} />
       <Drawer.Screen name="MyProfile" component={MyProfile} />
 
 

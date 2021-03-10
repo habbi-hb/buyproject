@@ -40,6 +40,10 @@ const Header = () => {
   // const tex = 'username';
   // const pwd = 'password';
   useEffect(() => {
+    AsyncStorage.getItem('abc').then((result) => {
+
+   
+    });
     fetch(
       'https://thecodeditors.com/test/buy_it/api-user-login.php?email=' +
         tex +
